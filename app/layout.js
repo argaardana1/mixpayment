@@ -1,19 +1,12 @@
+import "./globals.css"; // Baris ini jangan sampai hilang!
 import { Inter } from "next/font/google";
-import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "MixPay Gateway",
-  description: "Premium Payment Gateway",
-};
 
 export default function RootLayout({ children }) {
   return (
     <html lang="id">
-      <body>
-        {children}
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
