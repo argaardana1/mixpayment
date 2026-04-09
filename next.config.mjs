@@ -10,12 +10,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '********.supabase.co', // Ganti dengan hostname supabase kamu
+        hostname: 'bzyuoiibybmujvpnvlsa.supabase.co', // <-- SUDAH SAYA PERBAIKI
         pathname: '**',
       },
     ],
   },
-  // Mengabaikan error linting saat build agar proses deploy cepat
   eslint: {
     ignoreDuringBuilds: true,
   },
