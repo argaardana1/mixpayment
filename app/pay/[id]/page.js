@@ -1,56 +1,52 @@
 "use client";
-import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import Swal from 'sweetalert2';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { QrCode, CreditCard, Info, CheckCircle2 } from 'lucide-react';
 
 export default function CheckoutPage({ params }) {
   const [data, setData] = useState(null);
 
-  useEffect(() => {
-    // Real-time listener: Cek perubahan status di Supabase
-    const sub = supabase.channel('realtime_pay')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'transactions', filter: `id=eq.${params.id}` }, 
-      (payload) => {
-        if (payload.new.status === 'success') {
-          Swal.fire({
-            icon: 'success',
-            title: 'Pembayaran Berhasil',
-            showConfirmButton: false,
-            timer: 2000
-          }).then(() => window.location.href = '/success');
-        }
-      }).subscribe();
-
-    return () => supabase.removeChannel(sub);
-  }, []);
-
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 font-sans">
-      <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-blue-600 font-black text-2xl tracking-tighter">MixPay</h1>
-          <div className="mt-4 bg-blue-50 py-2 rounded-full inline-block px-6">
-            <p className="text-blue-600 font-bold text-sm">Menunggu Pembayaran</p>
+    <div className="min-h-screen bg-[#020617] p-4 flex items-center justify-center">
+      <div className="w-full max-w-[450px]">
+        {/* Header Invoice */}
+        <div className="bg-slate-900 border border-slate-800 rounded-t-[2.5rem] p-8 text-center border-b-0">
+          <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-2">Total Pembayaran</p>
+          <h1 className="text-4xl font-black text-white italic">Rp 50.000</h1>
+        </div>
+
+        {/* QR Section */}
+        <div className="bg-white rounded-b-[2.5rem] p-10 flex flex-col items-center">
+          <div className="relative p-4 bg-slate-50 rounded-[2rem] border-4 border-slate-100 mb-6">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ContohQRIS" alt="QRIS" className="w-64 h-64" />
+            <div className="absolute inset-0 flex items-center justify-center opacity-10">
+               <QrCode size={100} />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 bg-blue-50 text-blue-700 px-6 py-3 rounded-full font-bold text-sm mb-8">
+            <Info size={18} />
+            Scan QRIS dengan Aplikasi Apapun
+          </div>
+
+          {/* Payment Steps */}
+          <div className="w-full space-y-4">
+            <div className="flex gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+              <div className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">1</div>
+              <p className="text-sm text-slate-600 font-medium">Buka aplikasi E-Wallet (DANA, OVO, GoPay) atau Mobile Banking.</p>
+            </div>
+            <div className="flex gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+              <div className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">2</div>
+              <p className="text-sm text-slate-600 font-medium">Scan QR Code di atas dan masukkan PIN Anda.</p>
+            </div>
           </div>
         </div>
 
-        <div className="bg-slate-50 rounded-3xl p-6 border-2 border-dashed border-slate-200 text-center">
-          <p className="text-xs text-slate-400 font-bold uppercase mb-4 tracking-widest">Scan QRIS</p>
-          <img src={data?.qr_image || '/api/placeholder/300/300'} className="w-64 h-64 mx-auto rounded-xl shadow-lg" />
-          <h3 className="mt-6 text-2xl font-black text-slate-800 tracking-tight">Rp {data?.amount?.toLocaleString()}</h3>
-        </div>
-
-        <div className="mt-8 space-y-4">
-          <div className="flex justify-between text-sm">
-            <span className="text-slate-400">Order ID</span>
-            <span className="font-bold text-slate-700">#MXP-{params.id.slice(0,8)}</span>
-          </div>
-          <button className="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-blue-600 transition-all shadow-xl">
-            Cek Status Manual
-          </button>
-        </div>
+        <p className="text-center mt-8 text-slate-500 text-xs font-bold uppercase tracking-tighter">
+          Powered by <span className="text-blue-500">MixPay Gateway</span>
+        </p>
       </div>
     </div>
   );
     }
-    
+                             
