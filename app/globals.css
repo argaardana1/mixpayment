@@ -2,35 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 15, 23, 42;
-  --background-start-rgb: 248, 250, 252;
-  --background-end-rgb: 255, 255, 255;
+@layer base {
+  body { @apply antialiased overflow-x-hidden; }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  min-height: 100vh;
+input, button, select {
+  -webkit-tap-highlight-color: transparent;
+  @apply outline-none;
 }
 
-/* Custom UI MixPay */
-.glass-card {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 2rem;
+/* Custom Smooth SweetAlert */
+.swal2-popup {
+  border-radius: 2.5rem !important;
+  background: #1E293B !important;
+  color: #fff !important;
+  padding: 2rem !important;
 }
-
-.btn-primary {
-  @apply bg-blue-600 text-white font-bold py-4 px-8 rounded-[2rem] hover:bg-blue-700 transition-all active:scale-95 shadow-lg shadow-blue-200;
-}
-
-input, select {
-  @apply w-full p-4 bg-white border-2 border-slate-100 rounded-2xl focus:border-blue-500 outline-none transition-all;
+.swal2-styled.swal2-confirm {
+  background: #2563EB !important;
+  border-radius: 1.5rem !important;
+  padding: 1rem 2rem !important;
+  font-weight: bold !important;
 }
