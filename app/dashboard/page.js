@@ -1,68 +1,68 @@
 "use client";
 import { useEffect, useState } from 'react';
+import { Wallet, Zap, History, ArrowUpCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Wallet, ArrowUpRight, CheckCircle, XCircle, LayoutDashboard } from 'lucide-react';
 
 export default function Dashboard() {
+  const [balance, setBalance] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getBalance() {
+      const res = await fetch('/api/atlantic/profile');
+      const data = await res.json();
+      setBalance(data.balance || 0);
+      setLoading(false);
+    }
+    getBalance();
+  }, []);
+
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      {/* Sidebar - Desktop Only */}
-      <aside className="w-64 bg-white border-r border-slate-100 p-6 hidden md:block">
-        <h1 className="text-2xl font-black text-blue-600 mb-10">MixPay</h1>
-        <nav className="space-y-4">
-          <button className="flex items-center gap-3 w-full p-3 bg-blue-50 text-blue-600 rounded-xl font-bold">
-            <LayoutDashboard size={20} /> Dashboard
-          </button>
-          {/* Menu lainnya... */}
-        </nav>
-      </aside>
+    <div className="min-h-screen p-5 max-w-md mx-auto">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-black italic tracking-tighter uppercase">Mix<span className="text-blue-500">Pay.</span></h1>
+        <div className="bg-slate-800 p-3 rounded-2xl"><Zap size={20} className="text-yellow-400" fill="currentColor" /></div>
+      </div>
 
-      <main className="flex-1 p-6 md:p-12 overflow-y-auto">
-        <header className="mb-10 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Overview</h2>
-          <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">A</div>
-        </header>
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }} 
+        animate={{ y: 0, opacity: 1 }}
+        className="bg-blue-600 p-8 rounded-[3rem] shadow-2xl shadow-blue-500/40 mb-10 relative overflow-hidden"
+      >
+        <p className="text-blue-100 text-sm font-bold opacity-80 mb-2 uppercase tracking-widest">Saldo Atlantic</p>
+        <h2 className="text-4xl font-black">
+          {loading ? "••••••" : `Rp ${Number(balance).toLocaleString('id-ID')}`}
+        </h2>
+        <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+      </motion.div>
 
-        {/* Statistik Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <StatCard title="Total Saldo" val="Rp 2.500.000" icon={<Wallet className="text-blue-500" />} color="bg-blue-500" />
-          <StatCard title="Total Transaksi" val="142" icon={<ArrowUpRight className="text-indigo-500" />} color="bg-indigo-500" />
-          <StatCard title="Berhasil" val="130" icon={<CheckCircle className="text-emerald-500" />} color="bg-emerald-500" />
-          <StatCard title="Gagal" val="12" icon={<XCircle className="text-rose-500" />} color="bg-rose-500" />
-        </div>
+      <div className="grid grid-cols-2 gap-4 mb-10">
+        <button className="premium-card p-6 flex flex-col items-center gap-2">
+          <ArrowUpCircle className="text-blue-400" size={32} />
+          <span className="text-xs font-bold uppercase text-slate-400">Withdraw</span>
+        </button>
+        <button className="premium-card p-6 flex flex-col items-center gap-2">
+          <History className="text-slate-400" size={32} />
+          <span className="text-xs font-bold uppercase text-slate-400">Riwayat</span>
+        </button>
+      </div>
 
-        {/* Transaksi Terbaru */}
-        <div className="mt-12 bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
-           <h3 className="text-lg font-bold mb-6 text-slate-800">Transaksi Terbaru</h3>
-           <div className="space-y-4">
-              {/* Contoh Row */}
-              <div className="flex justify-between items-center p-4 hover:bg-slate-50 rounded-2xl transition-all">
-                 <div className="flex gap-4 items-center">
-                    <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">QR</div>
-                    <div>
-                       <p className="font-bold text-slate-700">#MXP-992812</p>
-                       <p className="text-xs text-slate-400">12 Okt 2026, 14:20</p>
-                    </div>
-                 </div>
-                 <p className="font-black text-slate-800">Rp 50.350</p>
-                 <span className="px-3 py-1 bg-emerald-100 text-emerald-600 text-xs font-bold rounded-full">Berhasil</span>
+      <h3 className="font-black text-slate-400 text-xs uppercase tracking-[0.2em] mb-4">Transaksi Terakhir</h3>
+      <div className="space-y-4">
+        {[1,2,3].map(i => (
+          <div key={i} className="premium-card p-5 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="bg-slate-800 h-12 w-12 rounded-2xl flex items-center justify-center"><Wallet size={20} /></div>
+              <div>
+                <p className="font-bold text-sm">QRIS Payment</p>
+                <p className="text-[10px] text-slate-500">Sukses • 12:45 WIB</p>
               </div>
-           </div>
-        </div>
-      </main>
+            </div>
+            <p className="font-black text-emerald-400">+10.000</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
-
-function StatCard({ title, val, icon, color }) {
-  return (
-    <motion.div whileHover={{ y: -5 }} className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
-      <div className="flex justify-between mb-4">
-        <div className="p-3 bg-slate-50 rounded-2xl">{icon}</div>
-      </div>
-      <p className="text-slate-400 text-sm font-medium">{title}</p>
-      <h3 className="text-2xl font-black text-slate-800 mt-1 tracking-tight">{val}</h3>
-    </motion.div>
-  );
-          }
+                 }
           
