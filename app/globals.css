@@ -2,25 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body { @apply antialiased overflow-x-hidden; }
+:root {
+  --bg-dark: #0F172A;
+  --accent-blue: #2563EB;
 }
 
-input, button, select {
-  -webkit-tap-highlight-color: transparent;
-  @apply outline-none;
+body {
+  background-color: var(--bg-dark);
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* Custom Smooth SweetAlert */
-.swal2-popup {
-  border-radius: 2.5rem !important;
-  background: #1E293B !important;
-  color: #fff !important;
-  padding: 2rem !important;
+.premium-card {
+  background: linear-gradient(145deg, rgba(30,41,59,0.7) 0%, rgba(15,23,42,0.8) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 2.5rem;
 }
-.swal2-styled.swal2-confirm {
-  background: #2563EB !important;
-  border-radius: 1.5rem !important;
-  padding: 1rem 2rem !important;
-  font-weight: bold !important;
+
+.btn-main {
+  @apply py-4 px-6 rounded-[1.8rem] font-bold transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 bg-blue-600 hover:bg-blue-700;
 }
